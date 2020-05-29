@@ -14,5 +14,5 @@ fi
 echo "y" | sudo $ANDROID_HOME/cmdline-tools/tools/bin/sdkmanager "tools" > /dev/null
 echo "y" | sudo $ANDROID_HOME/cmdline-tools/tools/bin/sdkmanager --licenses > /dev/null
 
-echo "y" | sudo $ANDROID_HOME/cmdline-tools/tools/bin/sdkmanager "cmake;$ANDROID_CMAKE" > /dev/null
-echo "y" | sudo $ANDROID_HOME/cmdline-tools/tools/bin/sdkmanager "ndk;$ANDROID_NDK" > /dev/null
+#echo "y" | sudo $ANDROID_HOME/cmdline-tools/tools/bin/sdkmanager "cmake;$ANDROID_CMAKE" > /dev/null
+#echo "y" | sudo $ANDROID_HOME/cmdline-tools/tools/bin/sdkmanager "ndk;$ANDROID_NDK" > /dev/null

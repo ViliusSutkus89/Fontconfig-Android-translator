@@ -25,7 +25,7 @@ Include the library in app level build.gradle.
 
 ```gradle
 dependencies {
-    implementation 'com.viliussutkus89:fontconfig-android-translator:0.9.9'
+    implementation 'com.viliussutkus89:fontconfig-android-translator:1.0.0'
 }
 ```
 

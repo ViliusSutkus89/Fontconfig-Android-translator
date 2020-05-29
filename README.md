@@ -1,7 +1,7 @@
 # Fontconfig-Android-translator
 
-![Build](https://github.com/ViliusSutkus89/Fontconfig-Android-translator/workflows/build/badge.svg)
-[![Download](https://api.bintray.com/packages/viliussutkus89/maven-repo/AssetExtractor-android/images/download.svg)](https://bintray.com/viliussutkus89/maven-repo/AssetExtractor-android/_latestVersion)
+![Build](https://github.com/ViliusSutkus89/Fontconfig-Android-translator/workflows/Build/badge.svg)
+[![Download](https://api.bintray.com/packages/viliussutkus89/maven-repo/Fontconfig-Android-translator/images/download.svg)](https://bintray.com/viliussutkus89/maven-repo/Fontconfig-Android-translator/_latestVersion)
 
 [Fontconfig](https://www.freedesktop.org/wiki/Software/fontconfig/) is a library for configuring and customizing font access.
 To be usable by end applications, this library requires configuration.

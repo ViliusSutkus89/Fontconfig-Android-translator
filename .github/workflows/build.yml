@@ -41,8 +41,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./lib/build/outputs/aar/fontconfig-android-translator.aar
-          asset_name: fontconfig-android-translator.aar
+          asset_path: ./lib/build/outputs/aar/fontconfig-android-translator-release.aar
+          asset_name: fontconfig-android-translator-release.aar
           asset_content_type: application/zip
 
       - name: Generate javadoc

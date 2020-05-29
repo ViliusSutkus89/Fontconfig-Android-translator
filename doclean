@@ -1,0 +1,28 @@
+#!/bin/sh
+set -eu
+
+THIS_FILE=$(readlink -f "$0")
+BASEDIR=$(dirname "$THIS_FILE")
+
+function rm_folder_if_exists() {
+  if test -d $BASEDIR/$1
+  then
+    rm -r $BASEDIR/$1
+  fi
+}
+function rm_file_if_exists() {
+  if test -f $BASEDIR/$1
+  then
+    rm $BASEDIR/$1
+  fi
+}
+
+rm_folder_if_exists .gradle
+rm_folder_if_exists build
+rm_folder_if_exists lib/.cxx
+rm_folder_if_exists lib/build
+
+rm_folder_if_exists .idea
+rm_file_if_exists fontconfig-android-translator.iml
+rm_file_if_exists lib/lib.iml
+

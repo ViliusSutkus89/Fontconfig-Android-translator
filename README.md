@@ -1,7 +1,6 @@
 # Fontconfig-Android-translator
 
-![Build](https://github.com/ViliusSutkus89/Fontconfig-Android-translator/workflows/Build/badge.svg)
-[![Download](https://api.bintray.com/packages/viliussutkus89/maven-repo/fontconfig-android-translator/images/download.svg)](https://bintray.com/viliussutkus89/maven-repo/fontconfig-android-translator/_latestVersion)
+[![Maven Central](https://img.shields.io/maven-central/v/com.viliussutkus89/fontconfig-android-translator.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:com.viliussutkus89%20AND%20a:fontconfig-android-translator)
 
 [Fontconfig](https://www.freedesktop.org/wiki/Software/fontconfig/) is a library for configuring and customizing font access.
 To be usable by end applications, this library requires configuration.
@@ -12,6 +11,25 @@ This software is a translator which consumes Android's config XML files and prod
 
 Android systems from API level 21 provide config in /system/etc/fonts.xml, older versions provide it in /system/etc/system_fonts.xml
 
+## How to install:
+Library needs to be included as a dependency in the app level build.gradle:
+```gradle
+dependencies {
+    implementation 'com.viliussutkus89:fontconfig-android-translator:1.0.0'
+}
+```
+
+Fontconfig-Android-translator is distributed using [Maven Central](https://search.maven.org/artifact/com.viliussutkus89/fontconfig-android-translator) repository.  
+It needs be added to top level build.gradle:
+```gradle
+allprojects {
+  repositories {
+      // ...
+      mavenCentral()
+  }
+}
+```
+
 ## Usage
 
 Translator is interfaced through Java.
@@ -19,33 +37,4 @@ Translator is interfaced through Java.
 import com.viliussutkus89.android.fontconfigtranslator.FontconfigTranslator;
 File result = new File(context.getCacheDir(), "fontconfig/system-etc-fonts-xml-translated.conf");
 FontconfigTranslator.translate(result);
-```
-
-Include the library in app level build.gradle.
-
-```gradle
-dependencies {
-    implementation 'com.viliussutkus89:fontconfig-android-translator:1.0.0'
-}
-```
-
-Fontconfig-Android-translator is distributed using [JCenter](https://jcenter.bintray.com) Maven repository.  
-It needs be added to top level build.gradle.
-```gradle
-allprojects {
-    repositories {
-        jcenter()
-    }
-}
-```
-
-Older versions of Gradle (or Android Gradle plugin?) require JCenter url.
-```gradle
-allprojects {
-    repositories {
-        maven() {
-            url  "https://jcenter.bintray.com"
-        }
-    }
-}
 ```

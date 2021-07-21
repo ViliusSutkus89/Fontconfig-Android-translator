@@ -1,9 +1,8 @@
-version = '1.0.1'
 group = 'com.viliussutkus89'
 
 apply plugin: 'com.android.library'
-apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 android {
     compileSdkVersion 29
@@ -17,9 +16,10 @@ android {
 
         archivesBaseName = rootProject.name
 
+//        issue #2
 //        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
+//    issue #2
 //    externalNativeBuild.cmake {
 //        path "src/androidTest/cpp/CMakeLists.txt"
 //        version "3.10.2"
@@ -27,102 +27,90 @@ android {
 //    ndkVersion "21.2.6472646"
 }
 
+configurations {
+    javadocDependenciesToObtainClasspath
+}
+
 dependencies {
     implementation 'androidx.annotation:annotation:1.1.0'
+    javadocDependenciesToObtainClasspath 'androidx.annotation:annotation:1.1.0'
 
+//    issue #2
 //    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
 //    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    //#UNCOMMENT-DURING-STAGING#implementation 'com.viliussutkus89:fontconfig-android-translator:#STAGING-VERSION#'
+    // The line above is used by the scripts/prepareLibraryForStagingRepository
 }
 
 task sourceJar(type: Jar) {
     into ("", { from android.sourceSets.main.java.srcDirs} )
-    archiveBaseName = rootProject.name
-    archiveClassifier = 'sources'
+    archiveBaseName.set(rootProject.name)
+    archiveClassifier.set('sources')
 }
 
 task javadoc(type: Javadoc) {
     options.encoding = 'UTF-8'
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    classpath += configurations.javadocDependenciesToObtainClasspath
     title = "${rootProject.name} ${project.version} API"
+    failOnError = false
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
+    archiveClassifier.set('javadoc')
     from javadoc.destinationDir
 }
 
-bintray {
-    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
-    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
 
-    publications = ['projectRelease']
+                artifactId rootProject.name
+                version = rootProject.version
 
-    pkg {
-        repo = 'maven-repo'
-        name = rootProject.name
-        desc = 'Fontconfig config translator for Android'
+                artifact sourceJar
+                artifact javadocJar
 
-        websiteUrl = 'https://github.com/ViliusSutkus89/Fontconfig-Android-translator'
-        vcsUrl = 'https://github.com/ViliusSutkus89/Fontconfig-Android-translator.git'
-        issueTrackerUrl = 'https://github.com/ViliusSutkus89/Fontconfig-Android-translator/issues'
-
-        licenses = ['GPL-3.0-only']
-        labels = ['Fontconfig', 'Android', 'Translator', 'Bridge', 'config']
-
-        publish = true
-
-        version {
-            name = this.version
-            released = new Date()
-            vcsTag = "v${this.version}"
+                pom {
+                    name = rootProject.name
+                    description = 'Fontconfig config translator for Android'
+                    url = 'https://github.com/ViliusSutkus89/Fontconfig-Android-translator'
+                    packaging = 'aar'
+                    inceptionYear = '2019'
+                    licenses {
+                        license {
+                            name = 'The GNU General Public License, Version 3'
+                            url = 'https://www.gnu.org/licenses/gpl-3.0.txt'
+                            distribution = 'repo'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = "ViliusSutkus89"
+                            name = "Vilius Sutkus"
+                            email = "ViliusSutkus89@gmail.com"
+                        }
+                    }
+                    scm {
+                        url = 'https://github.com/ViliusSutkus89/Fontconfig-Android-translator'
+                        connection = 'https://github.com/ViliusSutkus89/Fontconfig-Android-translator.git'
+                    }
+                }
+            }
         }
     }
-}
 
-publishing {
-    publications {
-        projectRelease(MavenPublication) {
-            artifactId rootProject.name
-            artifact "$buildDir/outputs/aar/${rootProject.name}-release.aar"
-            artifact sourceJar
-            artifact javadocJar
-            pom {
-                packaging = 'aar'
-                url = 'https://github.com/ViliusSutkus89/Fontconfig-Android-translator'
-                inceptionYear = '2019'
-                licenses {
-                    license {
-                        name = 'The GNU General Public License, Version 3'
-                        url = 'https://www.gnu.org/licenses/gpl-3.0.txt'
-                        distribution = 'repo'
-                    }
-                }
-                developers {
-                    developer {
-                        id = "ViliusSutkus89"
-                        name = "Vilius Sutkus"
-                        email = "ViliusSutkus89@gmail.com"
-                    }
-                }
-                scm {
-                    url = 'https://github.com/ViliusSutkus89/Fontconfig-Android-translator'
-                    connection = 'https://github.com/ViliusSutkus89/Fontconfig-Android-translator.git'
-                }
-            }
-            pom.withXml {
-                def dependenciesNode = asNode().appendNode('dependencies')
-                // Iterate over the implementation dependencies (we don't want the test ones), adding a <dependency> node for each
-                configurations.implementation.allDependencies.each {
-                    // Ensure dependencies such as fileTree are not included in the pom.
-                    if (it.name != 'unspecified') {
-                        def dependencyNode = dependenciesNode.appendNode('dependency')
-                        dependencyNode.appendNode('groupId', it.group)
-                        dependencyNode.appendNode('artifactId', it.name)
-                        dependencyNode.appendNode('version', it.version)
-                    }
-                }
-            }
+    // This may look ugly...
+    // but useInMemoryPgpKeys expects valid keys even with required { false }
+    if (System.getenv('SIGNING_KEY')) {
+        signing {
+            required { true }
+            useInMemoryPgpKeys(System.getenv('SIGNING_KEY'), System.getenv('SIGNING_PASS'))
+            sign publishing.publications.release
         }
     }
 }

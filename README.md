@@ -15,7 +15,7 @@ Android systems from API level 21 provide config in /system/etc/fonts.xml, older
 Library needs to be included as a dependency in the app level build.gradle:
 ```gradle
 dependencies {
-    implementation 'com.viliussutkus89:fontconfig-android-translator:1.0.1'
+    implementation 'com.viliussutkus89:fontconfig-android-translator:1.0.2'
 }
 ```
 

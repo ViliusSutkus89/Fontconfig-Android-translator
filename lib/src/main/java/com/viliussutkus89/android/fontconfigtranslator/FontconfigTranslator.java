@@ -302,7 +302,7 @@ public final class FontconfigTranslator {
 
     private static String removeCommonSuffixes(@NonNull String input) {
         String str = removeFilenameExtension(input);
-        String strUpper = str.toUpperCase();
+        String strUpper = str.toUpperCase(java.util.Locale.US);
 
         List<String> suffixes = Arrays.asList("-", "ITALIC", "THIN", "LIGHT", "REGULAR", "MEDIUM", "BLACK", "BOLD");
         boolean changeMade;

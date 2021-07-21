@@ -45,9 +45,9 @@ permissions:
   security-events: none
   statuses: none
 
-env:
-  ANDROID_NDK:        "21.2.6472646"
-  ANDROID_CMAKE:      "3.10.2.4988404"
+#env:
+#  ANDROID_NDK:        "21.2.6472646"
+#  ANDROID_CMAKE:      "3.10.2.4988404"
 
 jobs:
   buildLibrary:
